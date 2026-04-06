@@ -16,7 +16,7 @@ import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
 import {ModifyLiquidityParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 import {BalanceDelta, BalanceDeltaLibrary, toBalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 // Internal imports
-import {BaseHook} from "../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 import {CurrencySettler} from "../utils/CurrencySettler.sol";
 
 /**
@@ -47,7 +47,7 @@ import {CurrencySettler} from "../utils/CurrencySettler.sol";
  *
  * _Available since v0.1.1_
  */
-abstract contract LiquidityPenaltyHook is BaseHook {
+abstract contract LiquidityPenaltyHook is BaseSubHook {
     using CurrencySettler for Currency;
     using StateLibrary for IPoolManager;
     using SafeCast for uint256;

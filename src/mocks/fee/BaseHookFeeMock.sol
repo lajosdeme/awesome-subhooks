@@ -11,7 +11,7 @@ import {BalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 // Internal imports
 import {CurrencySettler} from "../../utils/CurrencySettler.sol";
 import {BaseHookFee} from "../../fee/BaseHookFee.sol";
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 contract BaseHookFeeMock is BaseHookFee, AccessControl {
     using CurrencySettler for Currency;
@@ -22,7 +22,7 @@ contract BaseHookFeeMock is BaseHookFee, AccessControl {
     /// @dev The authorized role to withdraw fees
     bytes32 public constant WITHDRAW_FEES_ROLE = keccak256("WITHDRAW_FEES_ROLE");
 
-    constructor(IPoolManager _poolManager, uint24 _hookFee, address _withdrawer) BaseHook(_poolManager) {
+    constructor(address _superHook, IPoolManager _poolManager, uint24 _hookFee, address _withdrawer) BaseSubHook(_superHook, _poolManager) {
         _grantRole(WITHDRAW_FEES_ROLE, _withdrawer);
         hookFee = _hookFee;
     }
@@ -44,7 +44,7 @@ contract BaseHookFeeMock is BaseHookFee, AccessControl {
     }
 
     /// @dev callback from the poolManager to unlock and transfer the hook fees to the sender.
-    function unlockCallback(bytes calldata data) external onlyPoolManager returns (bytes memory) {
+    function unlockCallback(bytes calldata data) external onlySuperHook returns (bytes memory) {
         (Currency[] memory currencies, address recipient) = abi.decode(data, (Currency[], address));
 
         // slither-disable-start calls-loop

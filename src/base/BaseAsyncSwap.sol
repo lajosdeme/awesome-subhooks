@@ -18,7 +18,7 @@ import {SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 // Internal imports
 import {CurrencySettler} from "../utils/CurrencySettler.sol";
 import {IHookEvents} from "../interfaces/IHookEvents.sol";
-import {BaseHook} from "../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 /**
  * @dev Base implementation for async swaps, which skip the v3-like swap implementation of the `PoolManager`
@@ -44,7 +44,7 @@ import {BaseHook} from "../base/BaseHook.sol";
  *
  * _Available since v0.1.0_
  */
-abstract contract BaseAsyncSwap is BaseHook, IHookEvents {
+abstract contract BaseAsyncSwap is BaseSubHook, IHookEvents {
     using SafeCast for uint256;
     using CurrencySettler for Currency;
 

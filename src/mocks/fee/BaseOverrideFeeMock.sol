@@ -7,10 +7,10 @@ import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
 import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
 // Internal imports
 import {BaseOverrideFee} from "../../fee/BaseOverrideFee.sol";
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 contract BaseOverrideFeeMock is BaseOverrideFee {
-    constructor(IPoolManager _poolManager) BaseHook(_poolManager) {}
+    constructor(address _superHook, IPoolManager _poolManager) BaseSubHook(_superHook, _poolManager) {}
 
     uint24 private _fee;
 

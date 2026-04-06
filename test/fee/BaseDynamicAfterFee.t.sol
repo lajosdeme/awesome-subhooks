@@ -8,10 +8,10 @@ import {Currency, CurrencyLibrary} from "@uniswap/v4-core/src/types/Currency.sol
 import {BalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 import {PoolId} from "@uniswap/v4-core/src/types/PoolId.sol";
 import {SafeCast} from "@uniswap/v4-core/src/libraries/SafeCast.sol";
-import {Deploy} from "@uniswap/v4-periphery/test/shared/Deploy.sol";
+import {Deploy} from "v4-periphery/test/shared/Deploy.sol";
 import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
 // solhint-disable-next-line no-unused-import
-import {V4Quoter} from "@uniswap/v4-periphery/src/lens/V4Quoter.sol";
+import {V4Quoter} from "v4-periphery/src/lens/V4Quoter.sol";
 
 // Internal imports
 import {BaseDynamicAfterFeeMock} from "../../src/mocks/fee/BaseDynamicAfterFeeMock.sol";

@@ -23,7 +23,7 @@ import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "@uniswap/v4-core/src/type
 import {TickMath} from "@uniswap/v4-core/src/libraries/TickMath.sol";
 import {LiquidityAmounts} from "@uniswap/v4-core/test/utils/LiquidityAmounts.sol";
 // Internal imports
-import {BaseHook} from "../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 import {CurrencySettler} from "../utils/CurrencySettler.sol";
 
 /**
@@ -66,7 +66,7 @@ import {CurrencySettler} from "../utils/CurrencySettler.sol";
  * this code base.
  * _Available since v1.2.0_
  */
-abstract contract ReHypothecationHook is BaseHook, ERC20, ReentrancyGuardTransient {
+abstract contract ReHypothecationHook is BaseSubHook, ERC20, ReentrancyGuardTransient {
     using TransientStateLibrary for IPoolManager;
     using StateLibrary for IPoolManager;
     using CurrencySettler for Currency;

@@ -10,7 +10,7 @@ import {BalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 // Internal imports
 import {BaseDynamicAfterFee} from "../../fee/BaseDynamicAfterFee.sol";
 import {CurrencySettler} from "../../utils/CurrencySettler.sol";
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 contract BaseDynamicAfterFeeMock is BaseDynamicAfterFee {
     using CurrencySettler for Currency;
@@ -18,7 +18,7 @@ contract BaseDynamicAfterFeeMock is BaseDynamicAfterFee {
     uint256 private _mockTargetUnspecifiedAmount;
     bool private _mockApplyTarget;
 
-    constructor(IPoolManager _poolManager) BaseHook(_poolManager) {}
+    constructor(address _superHook, IPoolManager _poolManager) BaseSubHook(_superHook, _poolManager) {}
 
     function setMockTargetUnspecifiedAmount(uint256 amount, bool active) public {
         _mockTargetUnspecifiedAmount = amount;

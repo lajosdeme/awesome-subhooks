@@ -15,7 +15,7 @@ import {TransientSlot} from "@openzeppelin/contracts/utils/TransientSlot.sol";
 import {SlotDerivation} from "@openzeppelin/contracts/utils/SlotDerivation.sol";
 import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 // Internal imports
-import {BaseHook} from "../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 import {IHookEvents} from "../interfaces/IHookEvents.sol";
 import {CurrencySettler} from "../utils/CurrencySettler.sol";
 
@@ -35,7 +35,7 @@ import {CurrencySettler} from "../utils/CurrencySettler.sol";
  *
  * _Available since v0.1.0_
  */
-abstract contract BaseDynamicAfterFee is BaseHook, IHookEvents {
+abstract contract BaseDynamicAfterFee is BaseSubHook, IHookEvents {
     using TransientSlot for *;
     using SlotDerivation for *;
     using SafeCast for *;

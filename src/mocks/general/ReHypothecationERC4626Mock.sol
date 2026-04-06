@@ -12,7 +12,7 @@ import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
 import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
 import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
 // Internal imports
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 import {ReHypothecationHook} from "../../general/ReHypothecationHook.sol";
 
 /// @title ERC4626Mock
@@ -36,8 +36,8 @@ contract ReHypothecationERC4626Mock is ReHypothecationHook {
     address private immutable yieldSource0;
     address private immutable yieldSource1;
 
-    constructor(IPoolManager _poolManager, address yieldSource0_, address yieldSource1_)
-        BaseHook(_poolManager)
+    constructor(address _superHook, IPoolManager _poolManager, address yieldSource0_, address yieldSource1_)
+        BaseSubHook(_superHook,_poolManager)
         ERC20("ReHypothecatatedShare", "RHM")
     {
         if (yieldSource0_ == address(0) || yieldSource1_ == address(0)) {

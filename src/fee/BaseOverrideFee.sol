@@ -10,7 +10,7 @@ import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "@uniswap/v4-core/src/type
 import {LPFeeLibrary} from "@uniswap/v4-core/src/libraries/LPFeeLibrary.sol";
 import {SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 // Internal imports
-import {BaseHook} from "../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 /**
  * @dev Base implementation for automatic dynamic fees applied before swaps.
@@ -21,7 +21,7 @@ import {BaseHook} from "../base/BaseHook.sol";
  *
  * _Available since v0.1.0_
  */
-abstract contract BaseOverrideFee is BaseHook {
+abstract contract BaseOverrideFee is BaseSubHook {
     using LPFeeLibrary for uint24;
 
     /**

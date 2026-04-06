@@ -16,7 +16,7 @@ contract BaseCustomAccountingFeeMock is BaseCustomAccountingMock {
     /// @notice The fee to keep from accrued fees, defined in basis points (up to 10_000)
     uint256 private _feesAccruedFeeBps;
 
-    constructor(IPoolManager _poolManager) BaseCustomAccountingMock(_poolManager) {}
+    constructor(address _superHook, IPoolManager _poolManager) BaseCustomAccountingMock(_superHook, _poolManager) {}
 
     function setFee(uint256 feeBps) external {
         _feesAccruedFeeBps = feeBps;

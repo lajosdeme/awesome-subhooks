@@ -15,7 +15,7 @@ import {SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 
 // Internal imports
 import {IHookEvents} from "../interfaces/IHookEvents.sol";
-import {BaseHook} from "../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 import {CurrencySettler} from "../utils/CurrencySettler.sol";
 
 /**
@@ -31,7 +31,7 @@ import {CurrencySettler} from "../utils/CurrencySettler.sol";
  *
  * _Available since v1.2.0_
  */
-abstract contract BaseHookFee is BaseHook, IHookEvents {
+abstract contract BaseHookFee is BaseSubHook, IHookEvents {
     using SafeCast for *;
     using CurrencySettler for Currency;
 

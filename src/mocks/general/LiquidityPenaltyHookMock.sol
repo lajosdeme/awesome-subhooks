@@ -5,12 +5,12 @@ pragma solidity ^0.8.26;
 import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
 // Internal imports
 import {LiquidityPenaltyHook} from "../../general/LiquidityPenaltyHook.sol";
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 contract LiquidityPenaltyHookMock is LiquidityPenaltyHook {
-    constructor(IPoolManager _poolManager, uint48 _blockNumberOffset)
+    constructor(address _superHook, IPoolManager _poolManager, uint48 _blockNumberOffset)
         LiquidityPenaltyHook(_blockNumberOffset)
-        BaseHook(_poolManager)
+        BaseSubHook(_superHook,_poolManager)
     {}
 
     // exclude from coverage report

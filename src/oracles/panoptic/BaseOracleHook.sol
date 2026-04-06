@@ -11,10 +11,10 @@ import {BeforeSwapDelta, BeforeSwapDeltaLibrary} from "@uniswap/v4-core/src/type
 import {SwapParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 // Internal
 import {Oracle} from "./libraries/Oracle.sol";
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 /// @dev A hook that enables a Uniswap V4 pool to record price observations and expose an oracle interface
-abstract contract BaseOracleHook is BaseHook {
+abstract contract BaseOracleHook is BaseSubHook {
     using Oracle for Oracle.Observation[65535];
     using StateLibrary for IPoolManager;
 
@@ -61,7 +61,7 @@ abstract contract BaseOracleHook is BaseHook {
         MAX_ABS_TICK_DELTA = _maxAbsTickDelta;
     }
 
-    /// @inheritdoc BaseHook
+    /// @inheritdoc BaseSubHook
     function getHookPermissions() public pure virtual override returns (Hooks.Permissions memory) {
         return Hooks.Permissions({
             beforeInitialize: false,

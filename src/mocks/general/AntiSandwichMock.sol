@@ -10,12 +10,12 @@ import {BalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 // Internal imports
 import {AntiSandwichHook} from "../../general/AntiSandwichHook.sol";
 import {CurrencySettler} from "../../utils/CurrencySettler.sol";
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 contract AntiSandwichMock is AntiSandwichHook {
     using CurrencySettler for Currency;
 
-    constructor(IPoolManager _poolManager) BaseHook(_poolManager) {}
+    constructor(address _superHook, IPoolManager _poolManager) BaseSubHook(_superHook, _poolManager) {}
 
     /**
      * @dev Handles the excess tokens collected during the swap due to the anti-sandwich mechanism.

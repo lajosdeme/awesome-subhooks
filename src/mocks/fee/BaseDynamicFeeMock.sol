@@ -7,12 +7,12 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
 // Internal imports
 import {BaseDynamicFee} from "../../fee/BaseDynamicFee.sol";
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 contract BaseDynamicFeeMock is BaseDynamicFee, AccessControl {
     bytes32 public constant POKE_ROLE = keccak256("POKE_ROLE");
 
-    constructor(IPoolManager _poolManager, address defaultAdmin, address poker) BaseHook(_poolManager) {
+    constructor(address _superHook, IPoolManager _poolManager, address defaultAdmin, address poker) BaseSubHook(_superHook, _poolManager) {
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(POKE_ROLE, poker);
     }

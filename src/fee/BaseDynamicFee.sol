@@ -8,7 +8,7 @@ import {Hooks} from "@uniswap/v4-core/src/libraries/Hooks.sol";
 import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
 import {LPFeeLibrary} from "@uniswap/v4-core/src/libraries/LPFeeLibrary.sol";
 // Internal imports
-import {BaseHook} from "../base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
 /**
  * @dev Base implementation to apply a dynamic fee via the `PoolManager`'s `updateDynamicLPFee` function.
@@ -19,7 +19,7 @@ import {BaseHook} from "../base/BaseHook.sol";
  *
  * _Available since v0.1.0_
  */
-abstract contract BaseDynamicFee is BaseHook {
+abstract contract BaseDynamicFee is BaseSubHook {
     using LPFeeLibrary for uint24;
 
     /**

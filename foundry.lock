@@ -1,0 +1,11 @@
+{
+  "lib/forge-std": {
+    "rev": "a6d71da563bbb8d6eef8fbec3a16c61c603d2764"
+  },
+  "lib/openzeppelin-contracts": {
+    "rev": "fcbae5394ae8ad52d8e580a3477db99814b9d565"
+  },
+  "lib/superhook": {
+    "rev": "5d74b3efcfda4f2d061c7d464948d5b6f1aa18cf"
+  }
+}

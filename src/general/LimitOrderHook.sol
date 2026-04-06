@@ -13,11 +13,16 @@ import {Currency} from "@uniswap/v4-core/src/types/Currency.sol";
 import {PoolId} from "@uniswap/v4-core/src/types/PoolId.sol";
 import {BalanceDelta} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
-import {IUnlockCallback} from "@uniswap/v4-core/src/interfaces/callback/IUnlockCallback.sol";
-import {SwapParams, ModifyLiquidityParams} from "@uniswap/v4-core/src/types/PoolOperation.sol";
+import {
+    IUnlockCallback
+} from "@uniswap/v4-core/src/interfaces/callback/IUnlockCallback.sol";
+import {
+    SwapParams,
+    ModifyLiquidityParams
+} from "@uniswap/v4-core/src/types/PoolOperation.sol";
 // Internal imports
 import {CurrencySettler} from "../utils/CurrencySettler.sol";
-import {BaseHook} from "../base/BaseHook.sol";
+import {BaseSuperHookUnlocker} from "@superhook/base/BaseSuperHookUnlocker.sol";
 
 /// @dev The order id library.
 library OrderIdLibrary {
@@ -62,7 +67,7 @@ library OrderIdLibrary {
  *
  * _Available since v1.1.0_
  */
-abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
+abstract contract LimitOrderHook is BaseSuperHookUnlocker {
     using StateLibrary for IPoolManager;
     using OrderIdLibrary for OrderIdLibrary.OrderId;
     using CurrencySettler for Currency;
@@ -132,19 +137,23 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
     bytes internal constant ZERO_BYTES = bytes("");
 
     /// @dev The default order id, used to indicate that an order is not yet initialized.
-    OrderIdLibrary.OrderId internal constant ORDER_ID_DEFAULT = OrderIdLibrary.OrderId.wrap(0);
+    OrderIdLibrary.OrderId internal constant ORDER_ID_DEFAULT =
+        OrderIdLibrary.OrderId.wrap(0);
 
     /// @dev The next order id to be used.
-    OrderIdLibrary.OrderId private _orderIdNext = OrderIdLibrary.OrderId.wrap(1);
+    OrderIdLibrary.OrderId private _orderIdNext =
+        OrderIdLibrary.OrderId.wrap(1);
 
     /// @dev The last tick lower for each pool.
     mapping(PoolId poolId => int24 tickLowerLast) private _tickLowerLasts;
 
     /// @dev Tracks each order id for a given `orderKey`, defined by `keccak256` of the `poolKey`, `tickLower`, and `zeroForOne`.
-    mapping(bytes32 orderKey => OrderIdLibrary.OrderId orderId) private _orderIds;
+    mapping(bytes32 orderKey => OrderIdLibrary.OrderId orderId)
+        private _orderIds;
 
     /// @dev Tracks the order info for each order id.
-    mapping(OrderIdLibrary.OrderId orderId => OrderInfo orderInfo) private _orderInfos;
+    mapping(OrderIdLibrary.OrderId orderId => OrderInfo orderInfo)
+        private _orderInfos;
 
     /// @dev Zero liquidity was attempted to be added or removed.
     error ZeroLiquidity();
@@ -179,7 +188,12 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * @dev Emitted when a limit order with the given `orderId` is filled in the pool identified by `key`,
      * at the given `tickLower`, `zeroForOne` indicating the direction of the order.
      */
-    event Fill(OrderIdLibrary.OrderId indexed orderId, PoolKey key, int24 tickLower, bool zeroForOne);
+    event Fill(
+        OrderIdLibrary.OrderId indexed orderId,
+        PoolKey key,
+        int24 tickLower,
+        bool zeroForOne
+    );
 
     /**
      * @dev Emitted when an `owner` cancels a limit order with the given `orderId`, in the pool identified by `key`,
@@ -199,28 +213,38 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * @dev Emitted when an `owner` withdraws their `liquidity` from a limit order with the given `orderId`, in the pool identified by `key`,
      * at the given `tickLower`, `zeroForOne` indicating the direction of the order.
      */
-    event Withdraw(address indexed owner, OrderIdLibrary.OrderId indexed orderId, uint128 liquidity);
+    event Withdraw(
+        address indexed owner,
+        OrderIdLibrary.OrderId indexed orderId,
+        uint128 liquidity
+    );
+
+    constructor(address _superHook, IPoolManager _poolManager) BaseSuperHookUnlocker(_superHook, _poolManager){}
 
     /// @dev Hooks into the `afterInitialize` hook to set the last tick lower for the pool.
-    function _afterInitialize(address, PoolKey calldata key, uint160, int24 tick)
-        internal
-        virtual
-        override
-        returns (bytes4)
-    {
+    function _afterInitialize(
+        address,
+        PoolKey calldata key,
+        uint160,
+        int24 tick
+    ) internal virtual override returns (bytes4) {
         _tickLowerLasts[key.toId()] = _getTickLower(tick, key.tickSpacing);
 
         return this.afterInitialize.selector;
     }
 
     /// @dev Hooks into the `afterSwap` hook to get the ticks crossed by the swap and fill the orders that are crossed, filling them.
-    function _afterSwap(address, PoolKey calldata key, SwapParams calldata params, BalanceDelta, bytes calldata)
-        internal
-        virtual
-        override
-        returns (bytes4, int128)
-    {
-        (int24 tickLower, int24 lower, int24 upper) = _getCrossedTicks(key.toId(), key.tickSpacing);
+    function _afterSwap(
+        address,
+        PoolKey calldata key,
+        SwapParams calldata params,
+        BalanceDelta,
+        bytes calldata
+    ) internal virtual override returns (bytes4, int128) {
+        (int24 tickLower, int24 lower, int24 upper) = _getCrossedTicks(
+            key.toId(),
+            key.tickSpacing
+        );
 
         if (lower > upper) return (this.afterSwap.selector, 0);
 
@@ -243,7 +267,12 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * whether to buy currency0 or currency1, and amount of `liquidity` to place. The interaction with the `poolManager` is done
      * via the `unlock` function, which will trigger the `{unlockCallback}` function.
      */
-    function placeOrder(PoolKey calldata key, int24 tick, bool zeroForOne, uint128 liquidity) public virtual {
+    function placeOrder(
+        PoolKey calldata key,
+        int24 tick,
+        bool zeroForOne,
+        uint128 liquidity
+    ) public virtual {
         if (liquidity == 0) revert ZeroLiquidity();
 
         OrderInfo storage orderInfo;
@@ -281,19 +310,32 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
         // fees accrued before the checkpoint. Note that the amounts in the checkpoints can only be from fees accrued,
         // never from order fills. The checkpoint is updated every time the user places an order.
         // This means possible fees accrued in between checkpoints are not taken into account, so the user is not entitled to them.
-        orderInfo.checkpoints[msg.sender].amountCurrency0 = orderInfo.currency0Total;
-        orderInfo.checkpoints[msg.sender].amountCurrency1 = orderInfo.currency1Total;
+        orderInfo.checkpoints[msg.sender].amountCurrency0 = orderInfo
+            .currency0Total;
+        orderInfo.checkpoints[msg.sender].amountCurrency1 = orderInfo
+            .currency1Total;
 
         // unlock the callback to the poolManager, the callback will trigger `unlockCallback`
         // note that multiple functions trigger `unlockCallback`, so the `callbackData.callbackType` will determine what happens
         // in `unlockCallback`. In this case, it will add liquidity out of range.
         // IMPORTANT: `tick` must be valid, i.e. within the range of `MIN_TICK` and `MAX_TICK`, defined in the `TickMath` library and it must be
         // a multiple of `key.tickSpacing`.
+
         (uint256 amount0Fee, uint256 amount1Fee) = abi.decode(
-            poolManager.unlock(
+            _unlock(
+                key.toId(),
                 abi.encode(
                     CallbackData(
-                        CallbackType.Place, abi.encode(PlaceCallbackData(key, msg.sender, zeroForOne, tick, liquidity))
+                        CallbackType.Place,
+                        abi.encode(
+                            PlaceCallbackData(
+                                key,
+                                msg.sender,
+                                zeroForOne,
+                                tick,
+                                liquidity
+                            )
+                        )
                     )
                 )
             ),
@@ -321,7 +363,12 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * Note also that cancelling an order will cancel the order placed by the msg.sender, not orders placed by other users in the same tick range.
      * The interaction with the `poolManager` is done via the `unlock` function, which will trigger the `{unlockCallback}` function.
      */
-    function cancelOrder(PoolKey calldata key, int24 tickLower, bool zeroForOne, address to) public virtual {
+    function cancelOrder(
+        PoolKey calldata key,
+        int24 tickLower,
+        bool zeroForOne,
+        address to
+    ) public virtual {
         // get the order
         OrderIdLibrary.OrderId orderId = getOrderId(key, tickLower, zeroForOne);
         OrderInfo storage orderInfo = _orderInfos[orderId];
@@ -353,13 +400,21 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
         // by the position, since the limit order is a liquidity addition.
         // Note that `amount0Fee` and `amount1Fee` are the fees accrued by the position and will not be transferred to
         // the `to` address. Instead, they will be added to the order info (benefiting the remaining limit order placers).
+
         (uint256 amount0Fee, uint256 amount1Fee) = abi.decode(
-            poolManager.unlock(
+            _unlock(
+                key.toId(),
                 abi.encode(
                     CallbackData(
                         CallbackType.Cancel,
                         abi.encode(
-                            CancelCallbackData(key, tickLower, -int256(uint256(liquidity)), to, removingAllLiquidity)
+                            CancelCallbackData(
+                                key,
+                                tickLower,
+                                -int256(uint256(liquidity)),
+                                to,
+                                removingAllLiquidity
+                            )
                         )
                     )
                 )
@@ -387,12 +442,14 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * filled - use `cancelOrder` to remove liquidity from unfilled orders. The interaction with the `poolManager` is done via the
      * `unlock` function, which will trigger the `{unlockCallback}` function.
      */
-    function withdraw(OrderIdLibrary.OrderId orderId, address to)
-        public
-        virtual
-        returns (uint256 amount0, uint256 amount1)
-    {
+    function withdraw(
+        PoolKey calldata key,
+        int24 tick,
+        bool zeroForOne,
+        address to
+    ) public virtual returns (uint256 amount0, uint256 amount1) {
         // get the order info
+        OrderIdLibrary.OrderId orderId = getOrderId(key, tick, zeroForOne);
         OrderInfo storage orderInfo = _orderInfos[orderId];
 
         // revert if the order is not filled
@@ -410,13 +467,25 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
         // get the total liquidity in the order
         uint128 liquidityTotal = orderInfo.liquidityTotal;
 
-        uint256 checkpointAmountCurrency0 = orderInfo.checkpoints[msg.sender].amountCurrency0;
-        uint256 checkpointAmountCurrency1 = orderInfo.checkpoints[msg.sender].amountCurrency1;
+        uint256 checkpointAmountCurrency0 = orderInfo
+            .checkpoints[msg.sender]
+            .amountCurrency0;
+        uint256 checkpointAmountCurrency1 = orderInfo
+            .checkpoints[msg.sender]
+            .amountCurrency1;
 
         // calculate the amount of currency0 and currency1 owed to the msg.sender
         // note that the user is not able to withdraw funds that were accrued before their checkpoint.
-        amount0 = FullMath.mulDiv(orderInfo.currency0Total - checkpointAmountCurrency0, liquidity, liquidityTotal);
-        amount1 = FullMath.mulDiv(orderInfo.currency1Total - checkpointAmountCurrency1, liquidity, liquidityTotal);
+        amount0 = FullMath.mulDiv(
+            orderInfo.currency0Total - checkpointAmountCurrency0,
+            liquidity,
+            liquidityTotal
+        );
+        amount1 = FullMath.mulDiv(
+            orderInfo.currency1Total - checkpointAmountCurrency1,
+            liquidity,
+            liquidityTotal
+        );
 
         // subtract the amount of currency0 and currency1 from the order info
         orderInfo.currency0Total -= amount0;
@@ -427,11 +496,20 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
 
         // unlock the callback to the poolManager, the callback will trigger `unlockCallback`
         // and return the liquidity to the `to` address.
-        poolManager.unlock(
+        _unlock(
+            key.toId(),
             abi.encode(
                 CallbackData(
                     CallbackType.Withdraw,
-                    abi.encode(WithdrawCallbackData(orderInfo.currency0, orderInfo.currency1, amount0, amount1, to))
+                    abi.encode(
+                        WithdrawCallbackData(
+                            orderInfo.currency0,
+                            orderInfo.currency1,
+                            amount0,
+                            amount1,
+                            to
+                        )
+                    )
                 )
             )
         );
@@ -445,23 +523,39 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * and operation-specific data. Returns encoded data containing fees accrued for cancel operations, or empty bytes
      * otherwise. Only callable by the PoolManager.
      */
-    function unlockCallback(bytes calldata rawData) public virtual onlyPoolManager returns (bytes memory returnData) {
+    function _subHookUnlockCallback(
+        PoolId poolId,
+        bytes memory rawData
+    ) internal virtual override returns (bytes memory) {
         CallbackData memory callbackData = abi.decode(rawData, (CallbackData));
 
         if (callbackData.callbackType == CallbackType.Place) {
-            PlaceCallbackData memory placeData = abi.decode(callbackData.data, (PlaceCallbackData));
-            (uint256 amount0Fee, uint256 amount1Fee) = _handlePlaceCallback(placeData);
+            PlaceCallbackData memory placeData = abi.decode(
+                callbackData.data,
+                (PlaceCallbackData)
+            );
+            (uint256 amount0Fee, uint256 amount1Fee) = _handlePlaceCallback(
+                placeData
+            );
             return abi.encode(amount0Fee, amount1Fee);
         }
 
         if (callbackData.callbackType == CallbackType.Cancel) {
-            CancelCallbackData memory cancelData = abi.decode(callbackData.data, (CancelCallbackData));
-            (uint256 amount0Fee, uint256 amount1Fee) = _handleCancelCallback(cancelData);
+            CancelCallbackData memory cancelData = abi.decode(
+                callbackData.data,
+                (CancelCallbackData)
+            );
+            (uint256 amount0Fee, uint256 amount1Fee) = _handleCancelCallback(
+                cancelData
+            );
             return abi.encode(amount0Fee, amount1Fee);
         }
 
         if (callbackData.callbackType == CallbackType.Withdraw) {
-            WithdrawCallbackData memory withdrawData = abi.decode(callbackData.data, (WithdrawCallbackData));
+            WithdrawCallbackData memory withdrawData = abi.decode(
+                callbackData.data,
+                (WithdrawCallbackData)
+            );
             _handleWithdrawCallback(withdrawData);
             return ZERO_BYTES;
         }
@@ -472,30 +566,39 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * specified liquidity to the pool out of range. Reverts if the order would be placed in range or on the wrong
      * side of the range.
      */
-    function _handlePlaceCallback(PlaceCallbackData memory placeData)
-        internal
-        virtual
-        returns (uint256 amount0Fee, uint256 amount1Fee)
-    {
+    function _handlePlaceCallback(
+        PlaceCallbackData memory placeData
+    ) internal virtual returns (uint256 amount0Fee, uint256 amount1Fee) {
         PoolKey memory key = placeData.key;
 
         // add the out of range liquidity to the pool
-        (BalanceDelta principalDelta, BalanceDelta feesAccrued) = poolManager.modifyLiquidity(
-            key,
-            ModifyLiquidityParams({
-                tickLower: placeData.tickLower,
-                tickUpper: placeData.tickLower + key.tickSpacing,
-                liquidityDelta: int256(uint256(placeData.liquidity)),
-                salt: 0
-            }),
-            ZERO_BYTES
-        );
+        (BalanceDelta principalDelta, BalanceDelta feesAccrued) = poolManager
+            .modifyLiquidity(
+                key,
+                ModifyLiquidityParams({
+                    tickLower: placeData.tickLower,
+                    tickUpper: placeData.tickLower + key.tickSpacing,
+                    liquidityDelta: int256(uint256(placeData.liquidity)),
+                    salt: 0
+                }),
+                ZERO_BYTES
+            );
 
         if (feesAccrued.amount0() > 0) {
-            key.currency0.take(poolManager, address(this), amount0Fee = uint256(uint128(feesAccrued.amount0())), true);
+            key.currency0.take(
+                poolManager,
+                address(this),
+                amount0Fee = uint256(uint128(feesAccrued.amount0())),
+                true
+            );
         }
         if (feesAccrued.amount1() > 0) {
-            key.currency1.take(poolManager, address(this), amount1Fee = uint256(uint128(feesAccrued.amount1())), true);
+            key.currency1.take(
+                poolManager,
+                address(this),
+                amount1Fee = uint256(uint128(feesAccrued.amount1())),
+                true
+            );
         }
 
         BalanceDelta delta = principalDelta - feesAccrued;
@@ -508,7 +611,12 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
             if (!placeData.zeroForOne) revert CrossedRange();
 
             // settle the currency0 to the owner
-            key.currency0.settle(poolManager, placeData.owner, uint256(uint128(-delta.amount0())), false);
+            key.currency0.settle(
+                poolManager,
+                placeData.owner,
+                uint256(uint128(-delta.amount0())),
+                false
+            );
         } else {
             // if the amount of currency0 is not 0, the limit order is in range
             if (delta.amount0() != 0) revert InRange();
@@ -516,7 +624,12 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
             if (placeData.zeroForOne) revert CrossedRange();
 
             // settle the currency1 to the owner
-            key.currency1.settle(poolManager, placeData.owner, uint256(uint128(-delta.amount1())), false);
+            key.currency1.settle(
+                poolManager,
+                placeData.owner,
+                uint256(uint128(-delta.amount1())),
+                false
+            );
         }
     }
 
@@ -525,24 +638,23 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * removes liquidity from the pool. Returns accrued fees `(amount0Fee, amount1Fee)` which are allocated to remaining
      * limit order placers, or to the cancelling user if they're removing all liquidity.
      */
-    function _handleCancelCallback(CancelCallbackData memory cancelData)
-        internal
-        virtual
-        returns (uint256 amount0Fee, uint256 amount1Fee)
-    {
+    function _handleCancelCallback(
+        CancelCallbackData memory cancelData
+    ) internal virtual returns (uint256 amount0Fee, uint256 amount1Fee) {
         int24 tickUpper = cancelData.tickLower + cancelData.key.tickSpacing;
 
         // remove the liquidity from the pool. The fees accrued by the position are included in the `cancelDelta`
-        (BalanceDelta cancelDelta, BalanceDelta feesAccrued) = poolManager.modifyLiquidity(
-            cancelData.key,
-            ModifyLiquidityParams({
-                tickLower: cancelData.tickLower,
-                tickUpper: tickUpper,
-                liquidityDelta: cancelData.liquidityDelta,
-                salt: 0
-            }),
-            ZERO_BYTES
-        );
+        (BalanceDelta cancelDelta, BalanceDelta feesAccrued) = poolManager
+            .modifyLiquidity(
+                cancelData.key,
+                ModifyLiquidityParams({
+                    tickLower: cancelData.tickLower,
+                    tickUpper: tickUpper,
+                    liquidityDelta: cancelData.liquidityDelta,
+                    salt: 0
+                }),
+                ZERO_BYTES
+            );
 
         BalanceDelta principalDelta;
 
@@ -554,14 +666,18 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
             // if the amount of fees in currency0 is positive, mint currency0 to the hook
             if (feesAccrued.amount0() > 0) {
                 poolManager.mint(
-                    address(this), cancelData.key.currency0.toId(), amount0Fee = uint128(feesAccrued.amount0())
+                    address(this),
+                    cancelData.key.currency0.toId(),
+                    amount0Fee = uint128(feesAccrued.amount0())
                 );
             }
 
             // if the amount of fees in currency1 is positive, mint currency1 to the hook
             if (feesAccrued.amount1() > 0) {
                 poolManager.mint(
-                    address(this), cancelData.key.currency1.toId(), amount1Fee = uint128(feesAccrued.amount1())
+                    address(this),
+                    cancelData.key.currency1.toId(),
+                    amount1Fee = uint128(feesAccrued.amount1())
                 );
             }
 
@@ -576,12 +692,22 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
 
         // if the amount of currency0 is positive, take the currency0 from the pool and send it to the `to` address
         if (principalDelta.amount0() > 0) {
-            cancelData.key.currency0.take(poolManager, cancelData.to, uint256(uint128(principalDelta.amount0())), false);
+            cancelData.key.currency0.take(
+                poolManager,
+                cancelData.to,
+                uint256(uint128(principalDelta.amount0())),
+                false
+            );
         }
 
         // if the amount of currency1 is positive, take the currency1 from the pool and send it to the `to` address
         if (principalDelta.amount1() > 0) {
-            cancelData.key.currency1.take(poolManager, cancelData.to, uint256(uint128(principalDelta.amount1())), false);
+            cancelData.key.currency1.take(
+                poolManager,
+                cancelData.to,
+                uint256(uint128(principalDelta.amount1())),
+                false
+            );
         }
     }
 
@@ -589,21 +715,39 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * @dev Internal handler for withdraw callbacks. Takes `withdrawData` containing withdrawal amounts and recipient,
      * burns the specified currency amounts from the hook, and transfers them to the recipient address.
      */
-    function _handleWithdrawCallback(WithdrawCallbackData memory withdrawData) internal virtual {
+    function _handleWithdrawCallback(
+        WithdrawCallbackData memory withdrawData
+    ) internal virtual {
         // if the amount of currency0 is positive, burn the currency0 from the hook
         if (withdrawData.currency0Amount > 0) {
             // burn the currency0 from the hook
-            poolManager.burn(address(this), withdrawData.currency0.toId(), withdrawData.currency0Amount);
+            poolManager.burn(
+                address(this),
+                withdrawData.currency0.toId(),
+                withdrawData.currency0Amount
+            );
             // take the currency0 from the pool and send it to the `to` address
-            poolManager.take(withdrawData.currency0, withdrawData.to, withdrawData.currency0Amount);
+            poolManager.take(
+                withdrawData.currency0,
+                withdrawData.to,
+                withdrawData.currency0Amount
+            );
         }
 
         // if the amount of currency1 is positive, burn the currency1 from the hook
         if (withdrawData.currency1Amount > 0) {
             // burn the currency1 from the hook
-            poolManager.burn(address(this), withdrawData.currency1.toId(), withdrawData.currency1Amount);
+            poolManager.burn(
+                address(this),
+                withdrawData.currency1.toId(),
+                withdrawData.currency1Amount
+            );
             // take the currency1 from the pool and send it to the `to` address
-            poolManager.take(withdrawData.currency1, withdrawData.to, withdrawData.currency1Amount);
+            poolManager.take(
+                withdrawData.currency1,
+                withdrawData.to,
+                withdrawData.currency1Amount
+            );
         }
     }
 
@@ -612,7 +756,11 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * and direction `zeroForOne`. Removes liquidity from filled orders, mints the received currencies to the hook, and
      * updates order state to track filled amounts.
      */
-    function _fillOrder(PoolKey calldata key, int24 tickLower, bool zeroForOne) internal virtual {
+    function _fillOrder(
+        PoolKey calldata key,
+        int24 tickLower,
+        bool zeroForOne
+    ) internal virtual {
         // slither-disable-start calls-loop
         OrderIdLibrary.OrderId orderId = getOrderId(key, tickLower, zeroForOne);
 
@@ -628,7 +776,7 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
             _setOrderId(key, tickLower, zeroForOne, ORDER_ID_DEFAULT);
 
             // modify the liquidity to remove the order liquidity from the pool
-            (BalanceDelta delta,) = poolManager.modifyLiquidity(
+            (BalanceDelta delta, ) = poolManager.modifyLiquidity(
                 key,
                 ModifyLiquidityParams({
                     tickLower: tickLower,
@@ -646,12 +794,20 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
 
             // if the amount of currency0 is positive, mint the currency0 to the hook
             if (delta.amount0() > 0) {
-                poolManager.mint(address(this), key.currency0.toId(), amount0 = uint128(delta.amount0()));
+                poolManager.mint(
+                    address(this),
+                    key.currency0.toId(),
+                    amount0 = uint128(delta.amount0())
+                );
             }
 
             // if the amount of currency1 is positive, mint the currency1 to the hook
             if (delta.amount1() > 0) {
-                poolManager.mint(address(this), key.currency1.toId(), amount1 = uint128(delta.amount1()));
+                poolManager.mint(
+                    address(this),
+                    key.currency1.toId(),
+                    amount1 = uint128(delta.amount1())
+                );
             }
 
             // add the amount of currency0 and currency1 to the order info
@@ -675,11 +831,10 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * and `tickSpacing`, returns the current `tickLower` and the range of ticks crossed (`lower`, `upper`) that need
      * to be checked for limit orders.
      */
-    function _getCrossedTicks(PoolId poolId, int24 tickSpacing)
-        internal
-        view
-        returns (int24 tickLower, int24 lower, int24 upper)
-    {
+    function _getCrossedTicks(
+        PoolId poolId,
+        int24 tickSpacing
+    ) internal view returns (int24 tickLower, int24 lower, int24 upper) {
         tickLower = _getTickLower(_getTick(poolId), tickSpacing);
         int24 tickLowerLast = getTickLowerLast(poolId);
 
@@ -705,11 +860,11 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * `zeroForOne` indicating whether it's buying currency0 or currency1. Returns the {OrderId} associated with this
      * position, or the default order id if no order exists.
      */
-    function getOrderId(PoolKey memory key, int24 tickLower, bool zeroForOne)
-        public
-        view
-        returns (OrderIdLibrary.OrderId)
-    {
+    function getOrderId(
+        PoolKey memory key,
+        int24 tickLower,
+        bool zeroForOne
+    ) public view returns (OrderIdLibrary.OrderId) {
         return _orderIds[keccak256(abi.encode(key, tickLower, zeroForOne))];
     }
 
@@ -717,7 +872,12 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * @dev Internal helper that updates the order ID mapping. Takes a `PoolKey` `key`, target `tickLower`, direction
      * `zeroForOne`, and `orderId` to store. Associates the given order id with the pool position's hash.
      */
-    function _setOrderId(PoolKey memory key, int24 tickLower, bool zeroForOne, OrderIdLibrary.OrderId orderId) private {
+    function _setOrderId(
+        PoolKey memory key,
+        int24 tickLower,
+        bool zeroForOne,
+        OrderIdLibrary.OrderId orderId
+    ) private {
         _orderIds[keccak256(abi.encode(key, tickLower, zeroForOne))] = orderId;
     }
 
@@ -725,7 +885,10 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * @dev Get the tick lower. Takes a `tick` and `tickSpacing` and returns the nearest valid tick boundary
      * at or below the input tick, accounting for negative tick handling.
      */
-    function _getTickLower(int24 tick, int24 tickSpacing) internal pure returns (int24) {
+    function _getTickLower(
+        int24 tick,
+        int24 tickSpacing
+    ) internal pure returns (int24) {
         // slither-disable-next-line divide-before-multiply
         int24 compressed = tick / tickSpacing;
         if (tick < 0 && tick % tickSpacing != 0) compressed--; // round towards negative infinity
@@ -736,7 +899,10 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * @dev Get the liquidity of an order for a given order id and owner. Takes an {OrderId} `orderId` and `owner` address
      * and returns the amount of liquidity the owner has contributed to the order.
      */
-    function getOrderLiquidity(OrderIdLibrary.OrderId orderId, address owner) external view returns (uint256) {
+    function getOrderLiquidity(
+        OrderIdLibrary.OrderId orderId,
+        address owner
+    ) external view returns (uint256) {
         return _orderInfos[orderId].liquidity[owner];
     }
 
@@ -745,14 +911,16 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * from the pool's current sqrt price.
      */
     function _getTick(PoolId poolId) internal view returns (int24 tick) {
-        (uint160 sqrtPriceX96,,,) = poolManager.getSlot0(poolId);
+        (uint160 sqrtPriceX96, , , ) = poolManager.getSlot0(poolId);
         tick = TickMath.getTickAtSqrtPrice(sqrtPriceX96);
     }
 
     /**
      * @dev Get the order info for a given order id. Takes an {OrderId} `orderId` and returns the order info.
      */
-    function getOrderInfo(OrderIdLibrary.OrderId orderId)
+    function getOrderInfo(
+        OrderIdLibrary.OrderId orderId
+    )
         external
         view
         returns (
@@ -778,22 +946,29 @@ abstract contract LimitOrderHook is BaseHook, IUnlockCallback {
      * @dev Get the hook permissions for this contract. Returns a `Hooks.Permissions` struct configured to enable
      * `afterInitialize` and `afterSwap` hooks while disabling all other hooks.
      */
-    function getHookPermissions() public pure virtual override returns (Hooks.Permissions memory permissions) {
-        return Hooks.Permissions({
-            beforeInitialize: false,
-            afterInitialize: true,
-            beforeAddLiquidity: false,
-            beforeRemoveLiquidity: false,
-            afterAddLiquidity: false,
-            afterRemoveLiquidity: false,
-            beforeSwap: false,
-            afterSwap: true,
-            beforeDonate: false,
-            afterDonate: false,
-            beforeSwapReturnDelta: false,
-            afterSwapReturnDelta: false,
-            afterAddLiquidityReturnDelta: false,
-            afterRemoveLiquidityReturnDelta: false
-        });
+    function getHookPermissions()
+        public
+        pure
+        virtual
+        override
+        returns (Hooks.Permissions memory permissions)
+    {
+        return
+            Hooks.Permissions({
+                beforeInitialize: false,
+                afterInitialize: true,
+                beforeAddLiquidity: false,
+                beforeRemoveLiquidity: false,
+                afterAddLiquidity: false,
+                afterRemoveLiquidity: false,
+                beforeSwap: false,
+                afterSwap: true,
+                beforeDonate: false,
+                afterDonate: false,
+                beforeSwapReturnDelta: false,
+                afterSwapReturnDelta: false,
+                afterAddLiquidityReturnDelta: false,
+                afterRemoveLiquidityReturnDelta: false
+            });
     }
 }

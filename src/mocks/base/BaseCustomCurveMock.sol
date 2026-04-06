@@ -10,10 +10,11 @@ import {PoolKey} from "@uniswap/v4-core/src/types/PoolKey.sol";
 import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
 // Internal imports
 import {BaseCustomCurve} from "../../base/BaseCustomCurve.sol";
-import {BaseHook} from "../../base/BaseHook.sol";
+import {BaseCustomAccounting} from "../../base/BaseCustomAccounting.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
-contract BaseCustomCurveMock is BaseCustomCurve, ERC20 {
-    constructor(IPoolManager _poolManager) BaseHook(_poolManager) ERC20("Mock", "MOCK") {}
+contract BaseCustomCurveMock is BaseCustomCurve, ERC20("Mock", "MOCK") {
+    constructor(address _superHook, IPoolManager _poolManager) BaseCustomAccounting(_superHook, _poolManager) {}
 
     function _getUnspecifiedAmount(SwapParams calldata params)
         internal
