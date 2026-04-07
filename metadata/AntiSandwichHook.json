@@ -5,5 +5,5 @@
   "tags": ["security", "mev-protection", "sandwich-resistance", "price-protection"],
   "incompatibleWith": ["ReHypothecationHook", "LiquidityPenaltyHook"],
   "audited": false,
-  "sourceUrl": "https://github.com/OpenZeppelin/openzeppelin-uniswap-v4-hooks/blob/main/src/general/AntiSandwichHook.sol"
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/general/AntiSandwichHook.sol"
 }

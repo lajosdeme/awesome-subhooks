@@ -3,7 +3,6 @@
   "description": "A hook that provides oracle functionality by recording price observations on every swap. The hook maintains a history of price observations and exposes a TWAP (Time-Weighted Average Price) oracle interface via the `observe` function. It supports increasing observation cardinality to store more historical data.",
   "whenToUse": "Use when your pool needs an on-chain price feed without deploying a separate oracle contract. Ideal for applications requiring TWAP prices for pricing, liquidations, or any DeFi integration that needs reliable price data. Commonly used with trading platforms, lending protocols, or any contract needing price references.",
   "tags": ["oracle", "twap", "price-feed", "observations"],
-  "incompatibleWith": [],
   "audited": false,
-  "sourceUrl": "https://github.com/OpenZeppelin/openzeppelin-uniswap-v4-hooks/blob/main/src/oracles/panoptic/BaseOracleHook.sol"
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/oracles/panoptic/BaseOracleHook.sol"
 }

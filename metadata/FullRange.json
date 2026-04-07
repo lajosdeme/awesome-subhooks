@@ -1,0 +1,8 @@
+ {
+  "name": "FullRange",
+  "description": "A hook that provides full-range liquidity provision similar to Uniswap V2. Liquidity is provided across the entire price range (MIN_TICK to MAX_TICK). The hook mints ERC20 liquidity tokens (UniswapV4ERC20) representing the LP's share of the pool. Includes automatic fee accrual tracking and a rebalance mechanism that reinvests fees into liquidity.",
+  "whenToUse": "Use when you want to offer V2-style full-range liquidity provision in V4. This is ideal for stable asset pairs, beginner-friendly LPing, or protocols that want simpler liquidity provision mechanics. Also serves as a building block for oracle pools.",
+  "tags": ["full-range", "liquidity", "erc-20", "lp-tokens", "v2-style"],
+  "audited": false,
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/v4-periphery-examples/FullRange.sol"
+}
