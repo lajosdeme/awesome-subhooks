@@ -28,7 +28,7 @@ contract AntiSandwichHookTest is HookTest, BalanceDeltaAssertions {
             address(uint160(Hooks.BEFORE_SWAP_FLAG | Hooks.AFTER_SWAP_FLAG | Hooks.AFTER_SWAP_RETURNS_DELTA_FLAG))
         );
         deployCodeTo(
-            "src/mocks/general/AntiSandwichMock.sol:AntiSandwichMock", abi.encode(address(manager)), address(hook)
+            "src/mocks/general/AntiSandwichMock.sol:AntiSandwichMock",             abi.encode(address(manager), address(manager)), address(hook)
         );
 
         (key,) = initPoolAndAddLiquidity(currency0, currency1, IHooks(address(hook)), 0, 60, SQRT_PRICE_1_1);

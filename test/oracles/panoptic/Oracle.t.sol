@@ -258,7 +258,7 @@ contract OracleLibTest is Test {
 
         deployCodeTo(
             "src/mocks/oracles/panoptic/OracleHookWithV3AdaptersMock.sol:OracleHookWithV3AdaptersMock",
-            abi.encode(address(manager), int24(9116)),
+            abi.encode(address(manager), address(manager), int24(9116)),
             address(ORACLE_BASE)
         );
     }

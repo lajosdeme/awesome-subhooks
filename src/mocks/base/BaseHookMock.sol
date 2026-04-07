@@ -20,7 +20,7 @@ import {IPoolManager} from "@uniswap/v4-core/src/interfaces/IPoolManager.sol";
 import {BaseSuperHookUnlocker} from "@superhook/base/BaseSuperHookUnlocker.sol";
 import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 
-contract BaseSubHookMock is BaseSuperHookUnlocker {
+contract BaseHookMock is BaseSuperHookUnlocker {
     event BeforeInitialize();
     event AfterInitialize();
     event BeforeAddLiquidity();

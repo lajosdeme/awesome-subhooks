@@ -46,7 +46,7 @@ contract LimitOrderHookTest is HookTest {
         hook = LimitOrderHookMock(address(uint160(Hooks.AFTER_INITIALIZE_FLAG | Hooks.AFTER_SWAP_FLAG)));
 
         deployCodeTo(
-            "src/mocks/general/LimitOrderHookMock.sol:LimitOrderHookMock", abi.encode(address(manager)), address(hook)
+            "src/mocks/general/LimitOrderHookMock.sol:LimitOrderHookMock",             abi.encode(address(manager), address(manager)), address(hook)
         );
 
         (key,) = initPool(currency0, currency1, IHooks(address(hook)), 3000, SQRT_PRICE_1_1);
@@ -482,7 +482,7 @@ contract LimitOrderHookTest is HookTest {
         assertEq(currency1Total, 2 * (2996 + 17), "wrong amount of currency1");
 
         vm.startPrank(user);
-        hook.withdraw(OrderIdLibrary.OrderId.wrap(1), user);
+        hook.withdraw(key, 0, true, user);
         vm.stopPrank();
 
         (filled,,, currency0Total, currency1Total,) = hook.getOrderInfo(OrderIdLibrary.OrderId.wrap(1));
@@ -491,7 +491,7 @@ contract LimitOrderHookTest is HookTest {
         assertEq(currency0Total, 0, "wrong amount of currency0");
         assertEq(currency1Total, 2996 + 17, "wrong amount of currency1");
 
-        hook.withdraw(OrderIdLibrary.OrderId.wrap(1), address(this));
+        hook.withdraw(key, 0, true, address(this));
 
         (filled,,, currency0Total, currency1Total,) = hook.getOrderInfo(OrderIdLibrary.OrderId.wrap(1));
 
@@ -548,7 +548,7 @@ contract LimitOrderHookTest is HookTest {
         vm.startPrank(user);
         int256 balanceUser0Before = int256(currency0.balanceOf(user));
         int256 balanceUser1Before = int256(currency1.balanceOf(user));
-        hook.withdraw(OrderIdLibrary.OrderId.wrap(1), user);
+        hook.withdraw(key, 0, true, user);
         int256 balanceUser0After = int256(currency0.balanceOf(user));
         int256 balanceUser1After = int256(currency1.balanceOf(user));
         vm.stopPrank();
@@ -651,7 +651,7 @@ contract LimitOrderHookTest is HookTest {
         vm.startPrank(attacker);
         int256 balanceAttacker0Before = int256(currency0.balanceOf(attacker));
         int256 balanceAttacker1Before = int256(currency1.balanceOf(attacker));
-        hook.withdraw(OrderIdLibrary.OrderId.wrap(1), attacker);
+        hook.withdraw(key, 0, true, attacker);
         int256 balanceAttacker0After = int256(currency0.balanceOf(attacker));
         int256 balanceAttacker1After = int256(currency1.balanceOf(attacker));
         vm.stopPrank();
@@ -676,7 +676,7 @@ contract LimitOrderHookTest is HookTest {
 
         int256 balanceUser0BeforeWithdraw = int256(currency0.balanceOf(user));
         int256 balanceUser1BeforeWithdraw = int256(currency1.balanceOf(user));
-        hook.withdraw(OrderIdLibrary.OrderId.wrap(1), user);
+        hook.withdraw(key, 0, true, user);
         int256 balanceUser0AfterWithdraw = int256(currency0.balanceOf(user));
         int256 balanceUser1AfterWithdraw = int256(currency1.balanceOf(user));
         vm.stopPrank();
@@ -763,6 +763,6 @@ contract LimitOrderHookTest is HookTest {
         assertEq(manager.getPositionLiquidity(key.toId(), positionId), liquidity);
 
         vm.expectRevert(LimitOrderHook.NotFilled.selector);
-        hook.withdraw(OrderIdLibrary.OrderId.wrap(1), address(this));
+        hook.withdraw(key, 0, true, address(this));
     }
 }

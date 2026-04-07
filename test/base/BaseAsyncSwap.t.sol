@@ -27,7 +27,7 @@ contract BaseAsyncSwapTest is HookTest {
 
         hook = BaseAsyncSwapMock(address(uint160(Hooks.BEFORE_SWAP_FLAG | Hooks.BEFORE_SWAP_RETURNS_DELTA_FLAG)));
         deployCodeTo(
-            "src/mocks/base/BaseAsyncSwapMock.sol:BaseAsyncSwapMock", abi.encode(address(manager)), address(hook)
+            "src/mocks/base/BaseAsyncSwapMock.sol:BaseAsyncSwapMock", abi.encode(address(manager), address(manager)), address(hook)
         );
 
         deployMintAndApprove2Currencies();

@@ -22,7 +22,6 @@ import {
 import {ReHypothecationHook} from "../../src/general/ReHypothecationHook.sol";
 import {HookTest} from "../utils/HookTest.sol";
 import {BalanceDeltaAssertions} from "../utils/BalanceDeltaAssertions.sol";
-import {BaseHook} from "../../src/base/BaseHook.sol";
 
 contract ReHypothecationHookERC4626Test is HookTest, BalanceDeltaAssertions {
     using StateLibrary for IPoolManager;
@@ -53,7 +52,7 @@ contract ReHypothecationHookERC4626Test is HookTest, BalanceDeltaAssertions {
         );
         deployCodeTo(
             "src/mocks/general/ReHypothecationERC4626Mock.sol:ReHypothecationERC4626Mock",
-            abi.encode(address(manager), address(yieldSource0), address(yieldSource1)),
+            abi.encode(address(manager), address(manager), address(yieldSource0), address(yieldSource1)),
             address(hook)
         );
 
@@ -102,7 +101,7 @@ contract ReHypothecationHookERC4626Test is HookTest, BalanceDeltaAssertions {
             abi.encodeWithSelector(
                 CustomRevert.WrappedError.selector,
                 address(hook), // target
-                bytes4(BaseHook.beforeInitialize.selector), // selector (beforeInitialize)
+                IHooks.beforeInitialize.selector, // selector (beforeInitialize)
                 abi.encodeWithSelector(ReHypothecationHook.AlreadyInitialized.selector), // reason
                 hex"a9e35b2f" // details
             )
@@ -133,7 +132,7 @@ contract ReHypothecationHookERC4626Test is HookTest, BalanceDeltaAssertions {
         );
         deployCodeTo(
             "src/mocks/general/ReHypothecationERC4626Mock.sol:ReHypothecationERC4626Mock",
-            abi.encode(address(manager), address(yieldSource0), address(yieldSource1)),
+            abi.encode(address(manager), address(manager), address(yieldSource0), address(yieldSource1)),
             address(newHook)
         );
         vm.expectRevert(ReHypothecationHook.NotInitialized.selector);
@@ -290,7 +289,7 @@ contract ReHypothecationHookERC4626Test is HookTest, BalanceDeltaAssertions {
         );
         deployCodeTo(
             "src/mocks/general/ReHypothecationERC4626Mock.sol:ReHypothecationERC4626Mock",
-            abi.encode(address(manager), address(yieldSource0), address(yieldSource1)),
+            abi.encode(address(manager), address(manager), address(yieldSource0), address(yieldSource1)),
             address(newHook)
         );
         vm.expectRevert(ReHypothecationHook.NotInitialized.selector);

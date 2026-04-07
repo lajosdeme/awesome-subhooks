@@ -50,7 +50,7 @@ contract LiquidityPenaltyHookTest is HookTest, BalanceDeltaAssertions {
         );
         deployCodeTo(
             "src/mocks/general/LiquidityPenaltyHookMock.sol:LiquidityPenaltyHookMock",
-            abi.encode(address(manager), 1),
+            abi.encode(address(manager), address(manager), 1),
             address(hook)
         );
 
@@ -65,7 +65,7 @@ contract LiquidityPenaltyHookTest is HookTest, BalanceDeltaAssertions {
         vm.expectRevert();
         deployCodeTo(
             "src/mocks/general/LiquidityPenaltyHookMock.sol:LiquidityPenaltyHookMock",
-            abi.encode(address(manager), 0),
+            abi.encode(address(manager), address(manager), 0),
             address(hook)
         );
     }
@@ -400,7 +400,7 @@ contract LiquidityPenaltyHookTest is HookTest, BalanceDeltaAssertions {
 
         deployCodeTo(
             "src/mocks/general/LiquidityPenaltyHookMock.sol:LiquidityPenaltyHookMock",
-            abi.encode(address(manager), offset),
+            abi.encode(address(manager), address(manager), offset),
             address(newHook)
         );
 
@@ -454,7 +454,7 @@ contract LiquidityPenaltyHookTest is HookTest, BalanceDeltaAssertions {
 
         deployCodeTo(
             "src/mocks/general/LiquidityPenaltyHookMock.sol:LiquidityPenaltyHookMock",
-            abi.encode(address(manager), offset),
+            abi.encode(address(manager), address(manager), offset),
             address(newHook)
         );
 

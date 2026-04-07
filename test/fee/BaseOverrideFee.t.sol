@@ -33,7 +33,7 @@ contract BaseOverrideFeeTest is HookTest {
         dynamicFeesHooks = BaseOverrideFeeMock(address(uint160(Hooks.BEFORE_SWAP_FLAG | Hooks.AFTER_INITIALIZE_FLAG)));
         deployCodeTo(
             "src/mocks/fee/BaseOverrideFeeMock.sol:BaseOverrideFeeMock",
-            abi.encode(address(manager)),
+            abi.encode(address(manager), address(manager)),
             address(dynamicFeesHooks)
         );
 

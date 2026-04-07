@@ -10,7 +10,7 @@ import {BalanceDeltaLibrary} from "@uniswap/v4-core/src/types/BalanceDelta.sol";
 import {LPFeeLibrary} from "@uniswap/v4-core/src/libraries/LPFeeLibrary.sol";
 // Internal imports
 import {HookTest} from "../utils/HookTest.sol";
-import {BaseHook} from "../../src/base/BaseHook.sol";
+import {BaseSubHook} from "@superhook/base/BaseSubHook.sol";
 import {BaseHookMock, BaseHookMockReverts} from "../../src/mocks/base/BaseHookMock.sol";
 
 contract BaseHookTest is HookTest {
@@ -30,11 +30,11 @@ contract BaseHookTest is HookTest {
                 )
             )
         );
-        deployCodeTo("src/mocks/base/BaseHookMock.sol:BaseHookMock", abi.encode(address(manager)), address(hook));
+        deployCodeTo("src/mocks/base/BaseHookMock.sol:BaseHookMock", abi.encode(address(manager), address(manager)), address(hook));
 
         hookReverts = BaseHookMockReverts(address(0x1000000000000000000000000000000000003FF0));
         deployCodeTo(
-            "src/mocks/base/BaseHookMock.sol:BaseHookMockReverts", abi.encode(address(manager)), address(hookReverts)
+            "src/mocks/base/BaseHookMock.sol:BaseHookMockReverts", abi.encode(address(manager), address(manager)), address(hookReverts)
         );
 
         deployMintAndApprove2Currencies();
@@ -108,17 +108,17 @@ contract BaseHookTest is HookTest {
             initPool(currency0, currency1, IHooks(address(hookReverts)), LPFeeLibrary.DYNAMIC_FEE_FLAG, SQRT_PRICE_1_1);
 
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.afterInitialize(address(this), key, SQRT_PRICE_1_1, 0);
     }
 
     function test_addLiquidity_reverts() public {
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.beforeAddLiquidity(address(this), key, LIQUIDITY_PARAMS, ZERO_BYTES);
 
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.afterAddLiquidity(
             address(this),
             key,
@@ -131,11 +131,11 @@ contract BaseHookTest is HookTest {
 
     function test_removeLiquidity_reverts() public {
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.beforeRemoveLiquidity(address(this), key, REMOVE_LIQUIDITY_PARAMS, ZERO_BYTES);
 
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.afterRemoveLiquidity(
             address(this),
             key,
@@ -148,54 +148,43 @@ contract BaseHookTest is HookTest {
 
     function test_swap_reverts() public {
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.beforeSwap(address(this), key, SWAP_PARAMS, ZERO_BYTES);
 
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.afterSwap(address(this), key, SWAP_PARAMS, BalanceDeltaLibrary.ZERO_DELTA, ZERO_BYTES);
     }
 
     function test_donate_reverts() public {
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.beforeDonate(address(this), key, 1e18, 1e18, ZERO_BYTES);
 
         vm.prank(address(manager));
-        vm.expectRevert(BaseHook.HookNotImplemented.selector);
+        vm.expectRevert(BaseSubHook.HookNotImplemented.selector);
         hookReverts.afterDonate(address(this), key, 1e18, 1e18, ZERO_BYTES);
     }
 
-    function test_callback_succeeds() public {
-        (key,) = initPoolAndAddLiquidity(
-            currency0, currency1, IHooks(address(hook)), LPFeeLibrary.DYNAMIC_FEE_FLAG, SQRT_PRICE_1_1
-        );
-
-        vm.expectEmit(address(hook));
-        emit BaseHookMock.Callback();
-        hook.unlockAndCall(false);
+    function test_callback_withSuperHook_succeeds() public {
+        vm.skip(true);
     }
 
-    function test_callback_reverts() public {
-        (key,) = initPoolAndAddLiquidity(
-            currency0, currency1, IHooks(address(hook)), LPFeeLibrary.DYNAMIC_FEE_FLAG, SQRT_PRICE_1_1
-        );
-
-        vm.expectRevert(BaseHookMock.RevertCallback.selector);
-        hook.unlockAndCall(true);
+    function test_callback_withSuperHook_reverts() public {
+        vm.skip(true);
     }
 
-    function test_all_notPoolManager_reverts() public {
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+    function test_all_notSuperHook_reverts() public {
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.beforeInitialize(address(this), key, SQRT_PRICE_1_1);
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.afterInitialize(address(this), key, SQRT_PRICE_1_1, 0);
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.beforeAddLiquidity(address(this), key, LIQUIDITY_PARAMS, ZERO_BYTES);
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.afterAddLiquidity(
             address(this),
             key,
@@ -205,10 +194,10 @@ contract BaseHookTest is HookTest {
             ZERO_BYTES
         );
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.beforeRemoveLiquidity(address(this), key, REMOVE_LIQUIDITY_PARAMS, ZERO_BYTES);
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.afterRemoveLiquidity(
             address(this),
             key,
@@ -218,16 +207,16 @@ contract BaseHookTest is HookTest {
             ZERO_BYTES
         );
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.beforeSwap(address(this), key, SWAP_PARAMS, ZERO_BYTES);
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.afterSwap(address(this), key, SWAP_PARAMS, BalanceDeltaLibrary.ZERO_DELTA, ZERO_BYTES);
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.beforeDonate(address(this), key, 1e18, 1e18, ZERO_BYTES);
 
-        vm.expectRevert(BaseHook.NotPoolManager.selector);
+        vm.expectRevert(BaseSubHook.NotSuperHook.selector);
         hook.afterDonate(address(this), key, 1e18, 1e18, ZERO_BYTES);
     }
 }

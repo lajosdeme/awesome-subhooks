@@ -47,7 +47,7 @@ contract BaseCustomCurveTest is HookTest {
                 ))
         );
         deployCodeTo(
-            "src/mocks/base/BaseCustomCurveMock.sol:BaseCustomCurveMock", abi.encode(address(manager)), address(hook)
+            "src/mocks/base/BaseCustomCurveMock.sol:BaseCustomCurveMock", abi.encode(address(manager), address(manager)), address(hook)
         );
 
         deployMintAndApprove2Currencies();
@@ -97,7 +97,7 @@ contract BaseCustomCurveTest is HookTest {
         BaseCustomCurveMock nativeHook = BaseCustomCurveMock(payable(0x1000000000000000000000000000000000002A88));
         deployCodeTo(
             "src/mocks/base/BaseCustomCurveMock.sol:BaseCustomCurveMock",
-            abi.encode(address(manager)),
+            abi.encode(address(manager), address(manager)),
             address(nativeHook)
         );
         (key, id) = initPool(
@@ -368,7 +368,7 @@ contract BaseCustomCurveTest is HookTest {
         BaseCustomCurveMock nativeHook = BaseCustomCurveMock(payable(0x1000000000000000000000000000000000002A88));
         deployCodeTo(
             "src/mocks/base/BaseCustomCurveMock.sol:BaseCustomCurveMock",
-            abi.encode(address(manager)),
+            abi.encode(address(manager), address(manager)),
             address(nativeHook)
         );
         (key, id) = initPool(
@@ -493,7 +493,7 @@ contract BaseCustomCurveTest is HookTest {
         BaseCustomCurveMock uninitializedHook = BaseCustomCurveMock(payable(0x1000000000000000000000000000000000002A88));
         deployCodeTo(
             "src/mocks/base/BaseCustomCurveMock.sol:BaseCustomCurveMock",
-            abi.encode(address(manager)),
+            abi.encode(address(manager), address(manager)),
             address(uninitializedHook)
         );
 
@@ -507,7 +507,7 @@ contract BaseCustomCurveTest is HookTest {
         BaseCustomCurveMock uninitializedHook = BaseCustomCurveMock(payable(0x1000000000000000000000000000000000002A88));
         deployCodeTo(
             "src/mocks/base/BaseCustomCurveMock.sol:BaseCustomCurveMock",
-            abi.encode(address(manager)),
+            abi.encode(address(manager), address(manager)),
             address(uninitializedHook)
         );
 

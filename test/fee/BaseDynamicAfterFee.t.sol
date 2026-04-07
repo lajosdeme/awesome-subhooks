@@ -37,7 +37,7 @@ contract BaseDynamicAfterFeeTest is HookTest {
         );
         deployCodeTo(
             "src/mocks/fee/BaseDynamicAfterFeeMock.sol:BaseDynamicAfterFeeMock",
-            abi.encode(address(manager)),
+            abi.encode(address(manager), address(manager)),
             address(dynamicFeesHook)
         );
 

@@ -48,7 +48,7 @@ contract ReHypothecationHookNativeTest is HookTest, BalanceDeltaAssertions {
         );
         deployCodeTo(
             "src/mocks/general/ReHypothecationNativeMock.sol:ReHypothecationNativeMock",
-            abi.encode(address(manager), address(yieldSource0), address(yieldSource1)),
+            abi.encode(address(manager), address(manager), address(yieldSource0), address(yieldSource1)),
             address(hook)
         );
 
@@ -107,7 +107,7 @@ contract ReHypothecationHookNativeTest is HookTest, BalanceDeltaAssertions {
         );
         deployCodeTo(
             "src/mocks/general/ReHypothecationNativeMock.sol:ReHypothecationNativeMock",
-            abi.encode(address(manager), address(yieldSource0), address(yieldSource1)),
+            abi.encode(address(manager), address(manager), address(yieldSource0), address(yieldSource1)),
             address(newHook)
         );
         (PoolKey memory nativeKey,) =
