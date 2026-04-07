@@ -3,7 +3,6 @@
   "description": "A hook that disincentivizes Just-in-Time (JIT) liquidity attacks by penalizing fee collection for liquidity added and removed within a configurable block window. Fees are withheld during the `blockNumberOffset` period and any collected fees are donated to LPs in range at the time of removal. Penalty decreases linearly from 100% at time of addition to 0% after the offset period.",
   "whenToUse": "Use when you want to protect long-term liquidity providers from JIT arbitrageurs who briefly add liquidity to capture fees during large swaps. This hook encourages sustainable liquidity provision by penalizing short-term liquidity flash lending strategies.",
   "tags": ["security", "jit-protection", "lp-protection", "anti-frontrunning"],
-  "incompatibleWith": ["ReHypothecationHook", "AntiSandwichHook"],
   "audited": false,
-  "sourceUrl": "https://github.com/OpenZeppelin/openzeppelin-uniswap-v4-hooks/blob/main/src/general/LiquidityPenaltyHook.sol"
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/general/LiquidityPenaltyHook.sol"
 }

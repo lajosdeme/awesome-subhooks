@@ -1,0 +1,8 @@
+{
+  "name": "GeomeanOracle",
+  "description": "A hook providing a V3-style geometric mean TWAP (Time-Weighted Average Price) oracle. Records price observations on every swap, liquidity addition, and liquidity removal. Enforces strict pool configuration: only one pool per token pair allowed, must use max tick spacing, and liquidity must be full-range. Liquidity is permanently locked to prevent manipulation. The observe function returns TWAP data for any secondsAgo value.",
+  "whenToUse": "Use when your pool needs an on-chain price feed without deploying a separate oracle contract. This is the canonical V4 oracle implementation similar to V3's oracle. Ideal for applications requiring TWAP prices for pricing, liquidations, or any DeFi integration needing reliable price data. Requires strict pool configuration (0 fee, max tick spacing).",
+  "tags": ["oracle", "twap", "price-feed", "geomean", "observations", "locked-liquidity"],
+  "audited": false,
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/v4-periphery-examples/GeomeanOracle.sol"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "VolatilityOracle",
+  "description": "A dynamic LP fee hook that automatically increases the pool's trading fee over time based on elapsed time since pool deployment. The starting fee is 30 bps and increases by 100 bps per minute. This hook uses the PoolManager's updateDynamicLPFee function to adjust fees dynamically.",
+  "whenToUse": "Use when implementing time-based fee escalation strategies, such as increasing fees during periods of high volatility or as a mechanism to discourage rapid trading. Ideal for specialized pools where fee dynamics should change over the pool's lifetime.",
+  "tags": ["oracle", "dynamic-fee", "volatility", "lp-fee", "time-based"],
+  "audited": false,
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/v4-periphery-examples/VolatilityOracle.sol"
+}

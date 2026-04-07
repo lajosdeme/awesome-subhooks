@@ -1,0 +1,8 @@
+{
+  "name": "VotingEscrowHook",
+  "description": "A hook implementing a Voting Escrow mechanism similar to Curve Finance's veCRV. Users lock their liquidity positions (by tick range) for a specified duration, and the hook tracks their voting power based on lock time and liquidity amount. Longer locks and more liquidity result in greater voting power. The hook maintains a checkpoint system for global and user voting power calculations.",
+  "whenToUse": "Use when you need to implement governance-weighted liquidity provision, where LPs get voting power based on their locked liquidity and lock duration. Ideal for DAO-governed protocols that want to reward long-term liquidity providers with governance influence, similar to Curve's ve model.",
+  "tags": ["governance", "voting-escrow", "locking", "ve-token", "lp-rewards"],
+  "audited": false,
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/awesome-hooks/VotingEscrowHook.sol"
+}
