@@ -1,8 +1,30 @@
 {
+  "id": "twamm",
   "name": "TWAMM",
+  "emoji": "⏱️",
+  "category": "lm",
+  "badges": ["popular"],
   "description": "A Time-Weighted Automated Market Maker (TWAMM) hook that enables long-term order execution. Users submit orders with a sell rate and expiration time; the hook executes virtual orders against the pool over time. The hook maintains two order pools (one for each direction) and executes trades via virtual orders that interact with the actual pool. Orders can be submitted, updated, and users can claim owed tokens.",
   "whenToUse": "Use when you need to support algorithmic trading strategies like Dollar-Cost Averaging (DCA), scheduled trading, or any use case requiring gradual order execution over time. Ideal for trading platforms, institutional traders, or any application needing time-decayed order execution.",
   "tags": ["twamm", "trading", "algorithmic-trading", "dca", "long-term-orders", "virtual-orders"],
   "audited": false,
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/v4-periphery-examples/TWAMM.sol"
+  "overridesFee": false,
+  "permissions": {
+    "beforeInitialize": true,
+    "afterInitialize": false,
+    "beforeAddLiquidity": true,
+    "afterAddLiquidity": false,
+    "beforeRemoveLiquidity": false,
+    "afterRemoveLiquidity": false,
+    "beforeSwap": true,
+    "afterSwap": false,
+    "beforeDonate": false,
+    "afterDonate": false,
+    "beforeSwapReturnDelta": false,
+    "afterSwapReturnDelta": false,
+    "afterAddLiquidityReturnDelta": false,
+    "afterRemoveLiquidityReturnDelta": false
+  },
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/v4-periphery-examples/TWAMM.sol",
+  "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/TWAMM.json"
 }

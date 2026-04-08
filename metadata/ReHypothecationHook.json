@@ -1,8 +1,30 @@
 {
+  "id": "rehypothecation-hook",
   "name": "ReHypothecationHook",
+  "emoji": "🌾",
+  "category": "lm",
+  "badges": ["popular", "OpenZeppelin"],
   "description": "A hook enabling liquidity rehypothecation into external yield sources (like ERC-4626 vaults). Users deposit assets into yield-generating protocols while their liquidity remains available for swaps via Just-in-Time (JIT) provisioning. The hook manages a single full-range liquidity position shared by all liquidity providers, providing ERC20 shares representing rehypothecated liquidity.",
   "whenToUse": "Use when you want to offer liquidity providers double-yielding strategies. Assets earn yield in external protocols when idle, then are injected as liquidity during swaps to provide better pricing, then withdrawn back to yield sources. Ideal for protocols wanting to integrate with lending protocols or yield farms while maintaining AMM liquidity.",
   "tags": ["yield", "rehypothecation", "jit-liquidity", "erc-4626", "yield-farming"],
   "audited": false,
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/general/ReHypothecationHook.sol"
+  "overridesFee": false,
+  "permissions": {
+    "beforeInitialize": true,
+    "afterInitialize": false,
+    "beforeAddLiquidity": false,
+    "afterAddLiquidity": false,
+    "beforeRemoveLiquidity": false,
+    "afterRemoveLiquidity": false,
+    "beforeSwap": true,
+    "afterSwap": true,
+    "beforeDonate": false,
+    "afterDonate": false,
+    "beforeSwapReturnDelta": false,
+    "afterSwapReturnDelta": false,
+    "afterAddLiquidityReturnDelta": false,
+    "afterRemoveLiquidityReturnDelta": false
+  },
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/general/ReHypothecationHook.sol",
+  "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/ReHypothecationHook.json"
 }

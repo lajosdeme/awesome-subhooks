@@ -1,8 +1,30 @@
 {
+  "id": "limit-order-hook",
   "name": "LimitOrderHook",
+  "emoji": "📝",
+  "category": "limit",
+  "badges": ["popular", "OpenZeppelin"],
   "description": "A hook enabling limit order functionality on Uniswap V4. Users can place orders at specific ticks outside the current price range. When the pool price crosses the order's tick, the order is automatically filled. Orders can be placed, cancelled, and withdrawn (after filling). The hook manages liquidity positions on behalf of users and tracks order state.",
   "whenToUse": "Use when you need to offer users the ability to place limit orders on Uniswap V4. This enables trading strategies like buying at a specific price or taking profit at a target level. Ideal for trading platforms, retail DEXes, or any application needing time-executed trades at specific prices.",
   "tags": ["trading", "limit-order", "orders", "automation"],
   "audited": false,
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/general/LimitOrderHook.sol"
+  "overridesFee": false,
+  "permissions": {
+    "beforeInitialize": false,
+    "afterInitialize": true,
+    "beforeAddLiquidity": false,
+    "afterAddLiquidity": false,
+    "beforeRemoveLiquidity": false,
+    "afterRemoveLiquidity": false,
+    "beforeSwap": false,
+    "afterSwap": true,
+    "beforeDonate": false,
+    "afterDonate": false,
+    "beforeSwapReturnDelta": false,
+    "afterSwapReturnDelta": false,
+    "afterAddLiquidityReturnDelta": false,
+    "afterRemoveLiquidityReturnDelta": false
+  },
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/general/LimitOrderHook.sol",
+  "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/LimitOrderHook.json"
 }

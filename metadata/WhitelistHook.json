@@ -1,8 +1,30 @@
 {
+  "id": "whitelist-hook",
   "name": "WhitelistHook",
+  "emoji": "📋",
+  "category": "access",
+  "badges": ["new"],
   "description": "A hook implementing an owner-managed whitelist for pool access. Only addresses added to the whitelist by the owner can add liquidity, remove liquidity, and execute swaps. The owner can add or remove addresses from the whitelist at any time via the addToWhitelist and removeFromWhitelist functions.",
   "whenToUse": "Use when you need simple access control for a private or semi-private pool. Ideal for beta pools, invite-only trading, or controlled trading environments where the owner curates who can participate. Simpler than KYC or NFT-based gating.",
   "tags": ["access-control", "whitelist", "owner-controlled", "gated", "private-pool"],
   "audited": false,
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/awesome-hooks/WhitelistHook.sol"
+  "overridesFee": false,
+  "permissions": {
+    "beforeInitialize": false,
+    "afterInitialize": false,
+    "beforeAddLiquidity": true,
+    "afterAddLiquidity": false,
+    "beforeRemoveLiquidity": true,
+    "afterRemoveLiquidity": false,
+    "beforeSwap": true,
+    "afterSwap": false,
+    "beforeDonate": false,
+    "afterDonate": false,
+    "beforeSwapReturnDelta": false,
+    "afterSwapReturnDelta": false,
+    "afterAddLiquidityReturnDelta": false,
+    "afterRemoveLiquidityReturnDelta": false
+  },
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/awesome-hooks/WhitelistHook.sol",
+  "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/WhitelistHook.json"
 }

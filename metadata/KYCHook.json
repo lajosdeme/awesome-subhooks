@@ -1,8 +1,30 @@
 {
+  "id": "kyc-hook",
   "name": "KYCHook",
+  "emoji": "✅",
+  "category": "access",
+  "badges": ["new"],
   "description": "A hook that enforces KYC (Know Your Customer) compliance by checking if the transaction origin holds a valid KYC token from an external KYC validity contract. Only addresses with valid KYC tokens can add liquidity, remove liquidity, and execute swaps. The hook includes an owner-managed timelock mechanism for updating the KYC validity contract (7-day delay).",
   "whenToUse": "Use when you need to comply with regulatory requirements by restricting pool access to verified users only. Ideal for regulated trading platforms, institutional DEXs, or any protocol requiring KYC compliance. The owner can update the KYC contract with a 7-day timelock for security.",
   "tags": ["kyc", "compliance", "access-control", "regulation", "gated"],
   "audited": false,
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/awesome-hooks/KYCHook.sol"
+  "overridesFee": false,
+  "permissions": {
+    "beforeInitialize": false,
+    "afterInitialize": false,
+    "beforeAddLiquidity": true,
+    "afterAddLiquidity": false,
+    "beforeRemoveLiquidity": true,
+    "afterRemoveLiquidity": false,
+    "beforeSwap": true,
+    "afterSwap": false,
+    "beforeDonate": false,
+    "afterDonate": false,
+    "beforeSwapReturnDelta": false,
+    "afterSwapReturnDelta": false,
+    "afterAddLiquidityReturnDelta": false,
+    "afterRemoveLiquidityReturnDelta": false
+  },
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/awesome-hooks/KYCHook.sol",
+  "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/KYCHook.json"
 }

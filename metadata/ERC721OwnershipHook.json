@@ -1,8 +1,30 @@
 {
+  "id": "erc721-ownership-hook",
   "name": "ERC721OwnershipHook",
+  "emoji": "🎫",
+  "category": "access",
+  "badges": ["new"],
   "description": "A hook that restricts swap access to only addresses that hold a specific ERC721 NFT. Before any swap is executed, the hook verifies that the sender owns at least one token from the configured NFT collection. If the sender does not own an NFT, the transaction reverts with NotNftOwner error.",
   "whenToUse": "Use when you need to restrict pool access to NFT holders, such as exclusive trading pools for NFT collection holders, community-gated DEXs, or member-only trading venues. Common use cases include NFT-fi protocols, exclusive DAO pools, or membership-based trading.",
   "tags": ["access-control", "nft", "ownership", "gated", "membership"],
   "audited": false,
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/awesome-hooks/ERC721OwnershipHook.sol"
+  "overridesFee": false,
+  "permissions": {
+    "beforeInitialize": false,
+    "afterInitialize": false,
+    "beforeAddLiquidity": false,
+    "afterAddLiquidity": false,
+    "beforeRemoveLiquidity": false,
+    "afterRemoveLiquidity": false,
+    "beforeSwap": true,
+    "afterSwap": false,
+    "beforeDonate": false,
+    "afterDonate": false,
+    "beforeSwapReturnDelta": false,
+    "afterSwapReturnDelta": false,
+    "afterAddLiquidityReturnDelta": false,
+    "afterRemoveLiquidityReturnDelta": false
+  },
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/awesome-hooks/ERC721OwnershipHook.sol",
+  "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/ERC721OwnershipHook.json"
 }

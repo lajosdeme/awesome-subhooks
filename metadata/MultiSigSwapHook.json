@@ -1,8 +1,30 @@
 {
+  "id": "multi-sig-swap-hook",
   "name": "MultiSigSwapHook",
+  "emoji": "🔐",
+  "category": "access",
+  "badges": ["new"],
   "description": "A hook implementing multi-signature requirements for swap execution. Before a swap can be executed, it must be approved by a minimum number of authorized signers. Signers can approve swaps off-chain, and once the required threshold is met, the swap proceeds. After execution, the approval is cleared. The hook owner can add/remove signers and adjust the required signature threshold.",
   "whenToUse": "Use when you need institutional-grade swap controls, such as treasury management, institutional trading desks, or any scenario requiring multiple parties to approve trades before execution. Ideal for protocols with multi-sig treasury or institutional liquidity providers.",
   "tags": ["multisig", "access-control", "institutional", "signatures", "approval"],
   "audited": false,
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/awesome-hooks/MultiSigSwapHook.sol"
+  "overridesFee": false,
+  "permissions": {
+    "beforeInitialize": false,
+    "afterInitialize": false,
+    "beforeAddLiquidity": false,
+    "afterAddLiquidity": false,
+    "beforeRemoveLiquidity": false,
+    "afterRemoveLiquidity": false,
+    "beforeSwap": true,
+    "afterSwap": true,
+    "beforeDonate": false,
+    "afterDonate": false,
+    "beforeSwapReturnDelta": false,
+    "afterSwapReturnDelta": false,
+    "afterAddLiquidityReturnDelta": false,
+    "afterRemoveLiquidityReturnDelta": false
+  },
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/awesome-hooks/MultiSigSwapHook.sol",
+  "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/MultiSigSwapHook.json"
 }

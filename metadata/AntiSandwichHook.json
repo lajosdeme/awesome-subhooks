@@ -1,9 +1,30 @@
 {
+  "id": "anti-sandwich-hook",
   "name": "AntiSandwichHook",
+  "emoji": "🛡️",
+  "category": "mev",
+  "badges": ["popular", "OpenZeppelin"],
   "description": "A hook implementing sandwich-resistant AMM design that prevents MEV extraction by ensuring swaps execute at beginning-of-block prices. For zeroForOne swaps, the pool uses normal xy=k pricing. For non-zeroForOne swaps, the price is fixed at the beginning of the block, preventing price manipulation within a block. The hook inherits from BaseDynamicAfterFee and collects fees from price improvements.",
   "whenToUse": "Use when you want to protect users from sandwich attacks and front-running. This hook is particularly useful for DEXes that want to ensure fair pricing and prevent MEV extraction. Note: Only protects zeroForOne direction, and may result in prices that don't reflect current market conditions due to reduced arbitrage.",
   "tags": ["security", "mev-protection", "sandwich-resistance", "price-protection"],
-  "incompatibleWith": ["ReHypothecationHook", "LiquidityPenaltyHook"],
   "audited": false,
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/master/src/general/AntiSandwichHook.sol"
+  "overridesFee": true,
+  "permissions": {
+      "beforeInitialize": false,
+      "afterInitialize": false,
+      "beforeAddLiquidity": false,
+      "afterAddLiquidity": false,
+      "beforeRemoveLiquidity": false,
+      "afterRemoveLiquidity": false,
+      "beforeSwap": true,
+      "afterSwap": true,
+      "beforeDonate": false,
+      "afterDonate": false,
+      "beforeSwapReturnDelta": false,
+      "afterSwapReturnDelta": true,
+      "afterAddLiquidityReturnDelta": false,
+      "afterRemoveLiquidityReturnDelta": false
+    },
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/general/AntiSandwichHook.sol",
+  "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/AntiSandwichHook.json"
 }
