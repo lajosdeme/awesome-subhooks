@@ -25,9 +25,9 @@
         "label": "veToken Symbol",
         "type": "text",
         "placeholder": "e.g. veTOKEN",
-        "hint": "Ticker symbol for the veToken (typically prefixed with \"ve\").",
-      },
-    ],
+        "hint": "Ticker symbol for the veToken (typically prefixed with \"ve\")."
+      }
+    ]
   },
   "permissions": {
     "beforeInitialize": false,
