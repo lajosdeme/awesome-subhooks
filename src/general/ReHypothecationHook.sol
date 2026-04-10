@@ -66,6 +66,7 @@ import {CurrencySettler} from "../utils/CurrencySettler.sol";
  * this code base.
  * _Available since v1.2.0_
  */
+ 
 abstract contract ReHypothecationHook is BaseSubHook, ERC20, ReentrancyGuardTransient {
     using TransientStateLibrary for IPoolManager;
     using StateLibrary for IPoolManager;

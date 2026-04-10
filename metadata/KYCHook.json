@@ -9,6 +9,11 @@
   "tags": ["kyc", "compliance", "access-control", "regulation", "gated"],
   "audited": false,
   "overridesFee": false,
+  "deployable":true,
+  "deployConfig": {
+      "factoryFn": "deployKYCHook",
+      "params": []
+    },
   "permissions": {
     "beforeInitialize": false,
     "afterInitialize": false,

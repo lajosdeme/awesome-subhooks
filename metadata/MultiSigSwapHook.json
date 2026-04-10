@@ -9,6 +9,26 @@
   "tags": ["multisig", "access-control", "institutional", "signatures", "approval"],
   "audited": false,
   "overridesFee": false,
+  "deployable": true,
+    "deployConfig": {
+      "factoryFn": "deployMultiSigSwapHook",
+      "params": [
+        {
+          "key": "signers",
+          "label": "Signer Addresses",
+          "type": "address-list",
+          "placeholder": "0xAbc…\n0xDef…\n0x123…",
+          "hint": "One address per line. Each swap above the configured threshold requires M-of-N approvals from this set.",
+        },
+        {
+          "key": "requiredSignatures",
+          "label": "Required Signatures (M)",
+          "type": "number",
+          "placeholder": "e.g. 2",
+          "hint": "Number of signers that must approve before a swap executes. Must be ≤ total signers."
+        }
+      ]
+    },
   "permissions": {
     "beforeInitialize": false,
     "afterInitialize": false,

@@ -2,6 +2,8 @@
   "id": "geomean-oracle",
   "name": "GeomeanOracle",
   "emoji": "🔮",
+  "address": "0xCa591d04059E529f94D9cd0F6eb7af685CAc3a80",
+  "deployable": false,
   "category": "oracle",
   "badges": ["popular"],
   "description": "A hook providing a V3-style geometric mean TWAP (Time-Weighted Average Price) oracle. Records price observations on every swap, liquidity addition, and liquidity removal. Enforces strict pool configuration: only one pool per token pair allowed, must use max tick spacing, and liquidity must be full-range. Liquidity is permanently locked to prevent manipulation. The observe function returns TWAP data for any secondsAgo value.",
@@ -9,6 +11,9 @@
   "tags": ["oracle", "twap", "price-feed", "geomean", "observations", "locked-liquidity"],
   "audited": false,
   "overridesFee": false,
+  "compatibility": [
+      { "level": "info", "message": "Requires <strong>beforeInitialize</strong> to record the genesis observation. Must be included in the initial sub-hook list at pool creation — it cannot be added after initialization." }
+    ],
   "permissions": {
     "beforeInitialize": true,
     "afterInitialize": true,

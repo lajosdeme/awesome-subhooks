@@ -25,6 +25,6 @@
     "afterAddLiquidityReturnDelta": false,
     "afterRemoveLiquidityReturnDelta": false
   },
-  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/general/ReHypothecationHook.sol",
+  "sourceUrl": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/src/general/ReHypothecationERC4626Hook.sol",
   "metadataUri": "https://raw.githubusercontent.com/lajosdeme/awesome-subhooks/refs/heads/main/metadata/ReHypothecationHook.json"
 }

@@ -2,6 +2,8 @@
   "id": "full-range",
   "name": "FullRange",
   "emoji": "🔄",
+  "address": "0xEDDFA67f1CC409343409B657711Bbdc212392880",
+  "deployable": false,
   "category": "lm",
   "badges": ["popular"],
   "description": "A hook that provides full-range liquidity provision similar to Uniswap V2. Liquidity is provided across the entire price range (MIN_TICK to MAX_TICK). The hook mints ERC20 liquidity tokens (UniswapV4ERC20) representing the LP's share of the pool. Includes automatic fee accrual tracking and a rebalance mechanism that reinvests fees into liquidity.",

@@ -2,6 +2,8 @@
   "id": "anti-sandwich-hook",
   "name": "AntiSandwichHook",
   "emoji": "🛡️",
+  "address": "0xC82F0f7e159B1E4519bDA116c513b0cfdee0C0c4",
+  "deployable": false,
   "category": "mev",
   "badges": ["popular", "OpenZeppelin"],
   "description": "A hook implementing sandwich-resistant AMM design that prevents MEV extraction by ensuring swaps execute at beginning-of-block prices. For zeroForOne swaps, the pool uses normal xy=k pricing. For non-zeroForOne swaps, the price is fixed at the beginning of the block, preventing price manipulation within a block. The hook inherits from BaseDynamicAfterFee and collects fees from price improvements.",

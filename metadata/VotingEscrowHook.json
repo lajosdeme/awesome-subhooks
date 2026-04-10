@@ -9,6 +9,26 @@
   "tags": ["governance", "voting-escrow", "locking", "ve-token", "lp-rewards"],
   "audited": false,
   "overridesFee": false,
+  "deployable": true,
+  "deployConfig": {
+    "factoryFn": "deployVotingEscrowHook",
+    "params": [
+      {
+        "key": "name",
+        "label": "veToken Name",
+        "type": "text",
+        "placeholder": "e.g. Vote-Escrowed TOKEN",
+        "hint": "Display name for the vote-escrowed token (e.g. \"Vote-Escrowed UNI\").",
+      },
+      {
+        "key": "symbol",
+        "label": "veToken Symbol",
+        "type": "text",
+        "placeholder": "e.g. veTOKEN",
+        "hint": "Ticker symbol for the veToken (typically prefixed with \"ve\").",
+      },
+    ],
+  },
   "permissions": {
     "beforeInitialize": false,
     "afterInitialize": true,

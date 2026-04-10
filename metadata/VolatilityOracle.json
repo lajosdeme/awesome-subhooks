@@ -2,6 +2,8 @@
   "id": "volatility-oracle",
   "name": "VolatilityOracle",
   "emoji": "📈",
+  "address": "0x4A4e16539b4F62e1E398c2CcBDb252CD91FBf000",
+  "deployable": false,
   "category": "fee",
   "badges": ["popular", "new"],
   "description": "A dynamic LP fee hook that automatically increases the pool's trading fee over time based on elapsed time since pool deployment. The starting fee is 30 bps and increases by 100 bps per minute. This hook uses the PoolManager's updateDynamicLPFee function to adjust fees dynamically.",

@@ -23,8 +23,9 @@ contract WhitelistHook is BaseSubHook, Ownable {
 
     constructor(
         address _superHook,
-        IPoolManager _poolManager
-    ) BaseSubHook(_superHook, _poolManager) Ownable(msg.sender) {}
+        IPoolManager _poolManager,
+        address owner
+    ) BaseSubHook(_superHook, _poolManager) Ownable(owner) {}
 
     function addToWhitelist(address _address) external onlyOwner {
         whitelisted[_address] = true;

@@ -9,6 +9,11 @@
   "tags": ["access-control", "whitelist", "owner-controlled", "gated", "private-pool"],
   "audited": false,
   "overridesFee": false,
+  "deployable": true,
+  "deployConfig": {
+    "factoryFn": "deployWhitelistHook",
+    "params": [],
+  },
   "permissions": {
     "beforeInitialize": false,
     "afterInitialize": false,

@@ -2,6 +2,8 @@
   "id": "oracle-hook",
   "name": "OracleHook",
   "emoji": "🔮",
+  "address": "0x3511E489D7fd9216F4D52a0e18bd21E954E01080",
+  "deployable": false,
   "category": "oracle",
   "badges": ["popular", "OpenZeppelin"],
   "description": "A hook that provides oracle functionality by recording price observations on every swap. The hook maintains a history of price observations and exposes a TWAP (Time-Weighted Average Price) oracle interface via the `observe` function. It supports increasing observation cardinality to store more historical data.",

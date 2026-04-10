@@ -9,6 +9,26 @@
   "tags": ["access-control", "nft", "ownership", "gated", "membership"],
   "audited": false,
   "overridesFee": false,
+  "deployable": true,
+  "deployConfig": {
+      "factoryFn": "deployERC721OwnershipHook",
+      "params": [
+        {
+          "key": "name",
+          "label": "NFT Collection Name",
+          "type": "text",
+          "placeholder": "e.g. Pool Access Pass",
+          "hint": "Display name for the ERC-721 token minted to permitted LPs.",
+        },
+        {
+          "key": "symbol",
+          "label": "NFT Symbol",
+          "type": "text",
+          "placeholder": "e.g. PAP",
+          "hint": "Ticker symbol for the access NFT (3 characters recommended).",
+        }
+      ]
+    },
   "permissions": {
     "beforeInitialize": false,
     "afterInitialize": false,

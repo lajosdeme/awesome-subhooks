@@ -14,6 +14,7 @@ import {
 import {ERC20} from "openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
 import {ReentrancyGuard} from "openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
 
+
 contract VotingEscrow is BaseSubHook, ReentrancyGuard {
     using PoolIdLibrary for PoolKey;
 

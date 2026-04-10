@@ -27,8 +27,9 @@ contract KYCSwaps is BaseSubHook, Ownable {
     constructor(
         address _superHook,
         IPoolManager _poolManager,
-        address _kycValidity
-    ) BaseSubHook(_superHook, _poolManager) Ownable(msg.sender) {
+        address _kycValidity,
+        address owner
+    ) BaseSubHook(_superHook, _poolManager) Ownable(owner) {
         kycValidity = IKycValidity(_kycValidity);
     }
 

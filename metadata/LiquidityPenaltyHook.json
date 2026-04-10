@@ -2,6 +2,8 @@
   "id": "liquidity-penalty-hook",
   "name": "LiquidityPenaltyHook",
   "emoji": "⚡",
+  "address": "0x65C44628493d52085CaA3Bff66d4B494F1B04503",
+  "deployable": false,
   "category": "lm",
   "badges": ["popular", "OpenZeppelin"],
   "description": "A hook that disincentivizes Just-in-Time (JIT) liquidity attacks by penalizing fee collection for liquidity added and removed within a configurable block window. Fees are withheld during the `blockNumberOffset` period and any collected fees are donated to LPs in range at the time of removal. Penalty decreases linearly from 100% at time of addition to 0% after the offset period.",

@@ -2,6 +2,8 @@
   "id": "limit-order-hook",
   "name": "LimitOrderHook",
   "emoji": "📝",
+  "address": "0x4aEad51cdAC125EBA30226E2C57CA7eC2e2bD040",
+  "deployable": false,
   "category": "limit",
   "badges": ["popular", "OpenZeppelin"],
   "description": "A hook enabling limit order functionality on Uniswap V4. Users can place orders at specific ticks outside the current price range. When the pool price crosses the order's tick, the order is automatically filled. Orders can be placed, cancelled, and withdrawn (after filling). The hook manages liquidity positions on behalf of users and tracks order state.",
