@@ -18,7 +18,7 @@
         "label": "veToken Name",
         "type": "text",
         "placeholder": "e.g. Vote-Escrowed TOKEN",
-        "hint": "Display name for the vote-escrowed token (e.g. \"Vote-Escrowed UNI\").",
+        "hint": "Display name for the vote-escrowed token (e.g. \"Vote-Escrowed UNI\")."
       },
       {
         "key": "symbol",

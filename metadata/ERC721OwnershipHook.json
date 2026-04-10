@@ -18,14 +18,14 @@
           "label": "NFT Collection Name",
           "type": "text",
           "placeholder": "e.g. Pool Access Pass",
-          "hint": "Display name for the ERC-721 token minted to permitted LPs.",
+          "hint": "Display name for the ERC-721 token minted to permitted LPs."
         },
         {
           "key": "symbol",
           "label": "NFT Symbol",
           "type": "text",
           "placeholder": "e.g. PAP",
-          "hint": "Ticker symbol for the access NFT (3 characters recommended).",
+          "hint": "Ticker symbol for the access NFT (3 characters recommended)."
         }
       ]
     },

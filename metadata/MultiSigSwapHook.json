@@ -18,7 +18,7 @@
           "label": "Signer Addresses",
           "type": "address-list",
           "placeholder": "0xAbc…\n0xDef…\n0x123…",
-          "hint": "One address per line. Each swap above the configured threshold requires M-of-N approvals from this set.",
+          "hint": "One address per line. Each swap above the configured threshold requires M-of-N approvals from this set."
         },
         {
           "key": "requiredSignatures",

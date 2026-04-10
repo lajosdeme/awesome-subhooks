@@ -12,7 +12,7 @@
   "deployable": true,
   "deployConfig": {
     "factoryFn": "deployWhitelistHook",
-    "params": [],
+    "params": []
   },
   "permissions": {
     "beforeInitialize": false,
